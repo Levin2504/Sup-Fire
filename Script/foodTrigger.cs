@@ -21,7 +21,7 @@ public class foodTrigger : MonoBehaviour {
             countDown = cdTime;
             childNum = Random.Range(0, 4);
 
-            GameObject randomChild = transform.GetChild(3).gameObject;
+            GameObject randomChild = transform.GetChild(childNum).gameObject;
             GameObject newChild = Instantiate(randomChild, new Vector3(0f, 5.24f, -0.5f), new Quaternion(0f, 0f, 0f, 0f)) as GameObject;
             newChild.SetActive(true);
         }
