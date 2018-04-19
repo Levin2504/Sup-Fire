@@ -99,10 +99,12 @@ public class ControllerP1_joystick : MonoBehaviour {
         audioR.Play();
         special = 3;
 
+
     }
     void Buff_Time(float buff_begin)//
     {
         buff_begin_time = buff_begin;
+
 
     }
     void testbuff()
@@ -142,7 +144,9 @@ public class ControllerP1_joystick : MonoBehaviour {
     void Start()
     {
         rigid = this.GetComponent<Rigidbody>();
+
         transform.GetChild(1).Rotate(0f, 90f, 0f);
+
     }
 
     void FixedUpdate()
@@ -215,14 +219,14 @@ public class ControllerP1_joystick : MonoBehaviour {
                     newBullet1.gameObject.SetActive(true);
                     newBullet1.transform.Translate(new Vector3(0.2f, 0f, 0f));
                     newBullet1.transform.Rotate(new Vector3(0f, 0f, -5f));
-                   // newBullet1.transform.Rotate(0f, 90f, 90f);
+
                     newBullet1.bulletSpeed = bulletSpeed;
                     newBullet1.SendMessage("SetMulti", true);
 
                     newBullet2.gameObject.SetActive(true);
                     newBullet2.transform.Translate(new Vector3(-0.2f, 0f, 0f));
                     newBullet2.transform.Rotate(new Vector3(0f, 0f, 5f));
-                   // newBullet2.transform.Rotate(0f, 90f, 90f);
+
                     newBullet2.bulletSpeed = bulletSpeed;
                     newBullet2.SendMessage("SetMulti", true);
 
@@ -246,7 +250,7 @@ public class ControllerP1_joystick : MonoBehaviour {
                     {
                         bulletMove newBullet = Instantiate(bullet, firepoint.position, firepoint.rotation) as bulletMove;
                         newBullet.gameObject.SetActive(true);
-                        //newBullet.transform.Rotate(0f, 90f, 90f);
+
                         newBullet.bulletSpeed = bulletSpeed;
                         if (isBig)
                         {
