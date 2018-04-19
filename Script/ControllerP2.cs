@@ -57,6 +57,7 @@ public class ControllerP2 : MonoBehaviour
     public float recoilIntensity;
 
     private GameObject player;
+    private bool SetScore = false;
 
     void SetBig()
     {
@@ -321,6 +322,12 @@ public class ControllerP2 : MonoBehaviour
         {
             StartCoroutine(DelayTime(0.3f));
             Time.timeScale = 0.2f;
+            GameObject[] score = GameObject.FindGameObjectsWithTag("Score");
+            if (!SetScore)
+            {
+                score[0].SendMessage("leftPlus");
+                SetScore = !SetScore;
+            }
         }
         if (special <= 0)
         {
