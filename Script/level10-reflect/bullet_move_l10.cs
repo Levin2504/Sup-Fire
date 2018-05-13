@@ -4,35 +4,43 @@ using UnityEngine;
 using EZCameraShake;
 
 
-public class bulletMove : MonoBehaviour {
+public class bullet_move_l10 : MonoBehaviour
+{
     public float bulletSpeed;
     public GameObject comeFrom;
     public bool isMulti;
     public bool isBig;
     public bool isFrozen;//
-
+    Rigidbody rigid;
     GameObject[] sparks;
-    GameObject waterSplatter;
+    //GameObject waterSplatter;
     GameObject[] explosion;
     GameObject[] delay;
     GameObject[] hit;
 
     public AudioSource expSound;
     public AudioSource hitSound;
-    public AudioSource waterSound;
+    public bool reverse;
+    private float angle;
+    private Quaternion angle1;
+    private Vector3 angle2;
+   // public AudioSource waterSound;
 
     private bool damagded = false;
 
     private void Awake()
     {
         sparks = GameObject.FindGameObjectsWithTag("sparks");
-        waterSplatter = GameObject.Find("FX_WaterSplatter");
+       // waterSplatter = GameObject.Find("FX_WaterSplatter");
     }
-    void Start () {
+    void Start()
+    {
         explosion = GameObject.FindGameObjectsWithTag("explosion");
         delay = GameObject.FindGameObjectsWithTag("delay");
         transform.Rotate(0f, 90f, 90f);
-
+        rigid = GetComponent<Rigidbody>();
+        angle1 = transform.rotation;
+        angle=transform.rotation.eulerAngles.x;
     }
 
     void SetMulti(bool multi)
@@ -49,15 +57,21 @@ public class bulletMove : MonoBehaviour {
         isFrozen = Frozen;
     }
 
-    void FixedUpdate () {
-        transform.Translate(Vector3.right * bulletSpeed * Time.deltaTime);
-        Debug.Log(transform);
-	}
+    void FixedUpdate()
+    {
+        Debug.Log(angle);
+            transform.Translate(Vector3.right* bulletSpeed * Time.deltaTime);
+        if (reverse)
+            transform.rotation = Quaternion.Euler(180-angle, 90, 90);
+            
+    }
 
-    private void OnTriggerStay(Collider other)
+ 
+    
+    private void OnCollisionEnter(Collision other)
     {
 
-        if (other.tag == "wall")
+        if (other.gameObject.tag == "wall")
         {
             hitSound.pitch = 0.1f * 1.05946f * Random.Range(8, 15);
             //0.8-1.5 as normal, 0.5-0.8 as big, need more modification
@@ -66,11 +80,11 @@ public class bulletMove : MonoBehaviour {
             if (isBig)
             {
                 newSparks.transform.localScale = new Vector3(2f, 2f, 2f);
-                CameraShaker.Instance.ShakeOnce(1.5f, 4f, 0f, 2f);
+                CameraShaker.Instance.ShakeOnce(2f, 4f, 0f, 3f);
             }
             else
             {
-                CameraShaker.Instance.ShakeOnce(1f, 4f, 0f, 0.8f);
+                CameraShaker.Instance.ShakeOnce(1.25f, 4f, 0f, 1.0f);
             }
             if (comeFrom.activeSelf)
             {
@@ -78,7 +92,8 @@ public class bulletMove : MonoBehaviour {
             }
             Destroy(gameObject);
             Destroy(newSparks, 0.5f);
-        }else if (other.tag == "Player")
+        }
+        else if (other.gameObject.tag == "Player")
         {
             GameObject newExplosion = Instantiate(explosion[0], transform.position, transform.rotation) as GameObject;
             GameObject newDelay = Instantiate(delay[0], transform.position, transform.rotation) as GameObject;
@@ -102,31 +117,18 @@ public class bulletMove : MonoBehaviour {
             Destroy(newDelay, 2.0f);
             if (!damagded)
             {
-                other.transform.parent.SendMessage("SetLife", isBig ? -2 : -1);
+                other.gameObject.SendMessage("SetLife", isBig ? -2 : -1);
                 damagded = !damagded;
 
             }
         }
-        else if (other.tag == "water")
+        else if (other.gameObject.tag == "bricks'")
         {
-            waterSound.pitch = 0.1f * 1.05946f * Random.Range(8, 15);
-            waterSound.Play();
-            GameObject newSplatters = Instantiate(waterSplatter, transform.position, new Quaternion()) as GameObject;
-            if (isBig)
-            {
-                ParticleSystem SplattersParticle = newSplatters.GetComponent<ParticleSystem>();
-                var main = SplattersParticle.main;
-                main.startSize = 0.4f;
-                main.startSpeed = 5f;
-            }
+            reverse = true;
 
-            if (comeFrom.activeSelf)
-            {
-                comeFrom.SendMessage("SetAmmo", isMulti ? 0.5f : 1f);
-            }
-
-            Destroy(gameObject);
-            Destroy(newSplatters, 1.5f);
         }
+        
+
+
     }
 }
