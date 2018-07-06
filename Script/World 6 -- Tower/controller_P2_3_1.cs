@@ -67,7 +67,7 @@ public class controller_P2_3_1 : MonoBehaviour {
 
     private GameObject player;
     private bool SetScore = false;
-
+    public bool heatmode;
     private Quaternion LastDirection;
     private bool isSpecial = false;
     void flagcheck()
@@ -323,7 +323,8 @@ public class controller_P2_3_1 : MonoBehaviour {
             {
                 shotCounter = timeBetweenShots;
                 audioS.volume = 0.3f;
-
+                if (heatmode)
+                    gameObject.SendMessage("Add", Time.time);
                 if (isMulti)
                 {
                     special_multi -= 1;
@@ -500,5 +501,23 @@ public class controller_P2_3_1 : MonoBehaviour {
         Time.timeScale = 1f;
         Application.targetFrameRate = -1;
         gameObject.SetActive(false);
+    }
+    void CoolMode()
+    {
+        heatmode = false;
+
+    }
+    void HeatMode()
+    {
+        heatmode = true;
+    }
+    void StopFire()
+    {
+        remainAmmo = 0;
+
+    }
+    void ResetAmmo()
+    {
+        remainAmmo = 5;
     }
 }

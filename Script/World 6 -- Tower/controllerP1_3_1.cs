@@ -67,7 +67,7 @@ public class controllerP1_3_1 : MonoBehaviour {
 
     private GameObject player;
     private bool SetScore = false;
-
+    public bool heatmode;
     private Quaternion LastDirection;
     private bool isSpecial = false;
     void flagcheck()
@@ -313,12 +313,14 @@ public class controllerP1_3_1 : MonoBehaviour {
 
         if (isFireing)
         {
+
             shotCounter -= Time.deltaTime;
             if (shotCounter <= 0)
             {
                 shotCounter = timeBetweenShots;
                 audioS.volume = 0.3f;
-
+                if(heatmode)
+                    gameObject.SendMessage("Add", Time.time);
                 if (isMulti)
                 {
                     special_multi -= 1;
@@ -346,8 +348,8 @@ public class controllerP1_3_1 : MonoBehaviour {
                         newBullet1.transform.GetChild(0).gameObject.SetActive(true);
                         newBullet1.GetComponent<ParticleSystemRenderer>().material = ice;
                     }
-                    
-                   
+
+
 
                     newBullet2.gameObject.SetActive(true);
                     newBullet2.transform.Translate(new Vector3(-0.2f, 0f, 0f));
@@ -491,7 +493,7 @@ public class controllerP1_3_1 : MonoBehaviour {
         }
 
 
-        SpeCount.SendMessage("SetSpe", Mathf.Max(special_big,Mathf.Max(special_frozen,Mathf.Max(special_missile),special_multi)));
+        SpeCount.SendMessage("SetSpe", Mathf.Max(special_big, Mathf.Max(special_frozen, Mathf.Max(special_missile), special_multi)));
 
     }
 
@@ -501,5 +503,24 @@ public class controllerP1_3_1 : MonoBehaviour {
         Time.timeScale = 1f;
         Application.targetFrameRate = -1;
         gameObject.SetActive(false);
+    }
+
+    void CoolMode()
+    {
+        heatmode = false;
+
+    }
+    void HeatMode()
+    {
+        heatmode=true;
+    }
+    void StopFire()
+    {
+        remainAmmo = 0;
+
+    }
+    void ResetAmmo()
+    {
+        remainAmmo = 5;
     }
 }
