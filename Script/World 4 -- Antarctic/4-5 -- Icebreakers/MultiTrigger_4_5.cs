@@ -26,7 +26,7 @@ public class MultiTrigger_4_5 : MonoBehaviour {
         }
         else if (other.tag == "Bullet")
         {
-            bulletMove_2_5 bullet = other.GetComponent<bulletMove_2_5>();
+            bullet_move_4_5 bullet = other.GetComponent<bullet_move_4_5>();
             target = bullet.comeFrom;
             target.SendMessage("SetMulti");
             got(target);
@@ -38,13 +38,6 @@ public class MultiTrigger_4_5 : MonoBehaviour {
             Destroy(gameObject);
 
         }
-        else if (other.tag == "Missile")
-        {
-            MissileMove_2_5 missile = other.GetComponent<MissileMove_2_5>();
-            target = missile.comeFrom;
-            target.SendMessage("SetMulti");
-            got(target);
-
-        }
+       
     }
 }
