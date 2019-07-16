@@ -18,7 +18,7 @@ public class SpawnSnow : MonoBehaviour {
         while (StartPointY <= 4.625f)
         {
             //while (StartPointX <= 10f)
-            for(int i = -10; i < 11; i += 2)
+            for(int i = -10; i < 11; i += 4)
             {
                 if (i == 0) continue;
                 Vector3 pos = new Vector3(i, StartPointY, -0.5f);
@@ -28,8 +28,9 @@ public class SpawnSnow : MonoBehaviour {
             }
             StartPointY += 0.5f;
             if (StartPointY >= 4.625f) break;
-            for (int i = -9; i < 11; i += 2)
+            for (int i = -8; i < 11; i += 4)
             {
+                if (i == 0) continue;
                 Vector3 pos = new Vector3(i, StartPointY, -0.5f);
                 GameObject FloorPart = Instantiate(IceCylinder, pos, Quaternion.Euler(90, 0, 0)) as GameObject;
                 FloorPart.gameObject.SetActive(true);
