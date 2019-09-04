@@ -11,12 +11,12 @@ public class bulletMove : MonoBehaviour {
     public bool isBig;
     public bool isFrozen;//
     public LavaMove lavaSplatter;
-
     GameObject[] sparks;
     GameObject waterSplatter;
     GameObject[] explosion;
     GameObject[] delay;
     GameObject[] hit;
+    bool hitted = false;
 
     public AudioSource expSound;
     public AudioSource hitSound;
@@ -30,8 +30,6 @@ public class bulletMove : MonoBehaviour {
     {
         sparks = GameObject.FindGameObjectsWithTag("sparks");
         waterSplatter = GameObject.Find("FX_WaterSplatter");
-    }
-    void Start () {
         explosion = GameObject.FindGameObjectsWithTag("explosion");
         delay = GameObject.FindGameObjectsWithTag("delay");
         transform.Rotate(0f, 90f, 90f);
@@ -60,8 +58,13 @@ public class bulletMove : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
+        if (hitted == true)//return may be a best solution here.In case that If the bullet need to accept multiple times of collision tests....need to put this right before the SetAmmo function 
+            return;
+       
+        bool created = false;
         if (other.tag == "wall"||other.tag=="container" || other.tag == "icicle")
         {
+            hitted = true;
             hitSound.pitch = 0.1f * 1.05946f * Random.Range(8, 15);
             //0.8-1.5 as normal, 0.5-0.8 as big, need more modification
             hitSound.Play();
@@ -77,13 +80,14 @@ public class bulletMove : MonoBehaviour {
             }
             if (comeFrom.activeSelf)
             {
-                comeFrom.SendMessage("SetAmmo", isMulti ? 0.5f : 1f);
+                 comeFrom.SendMessage("SetAmmo", isMulti ? 0.5f : 1f);
             }
             Destroy(gameObject);
             Destroy(newSparks, 0.5f);
         }
         else if (other.tag == "Player")
         {
+            hitted = true;
             GameObject newExplosion = Instantiate(explosion[0], transform.position, transform.rotation) as GameObject;
             GameObject newDelay = Instantiate(delay[0], transform.position, transform.rotation) as GameObject;
             newDelay.SetActive(true);
@@ -100,6 +104,7 @@ public class bulletMove : MonoBehaviour {
             expSound.Play();
 
             CameraShaker.Instance.ShakeOnce(isBig ? 6f : 3f, 20f, 0f, 0.5f);
+
             comeFrom.SendMessage("SetAmmo", isMulti ? 0.5f : 1f);
             Destroy(gameObject);
             Destroy(newExplosion, 2.0f);
@@ -114,6 +119,7 @@ public class bulletMove : MonoBehaviour {
         }
         else if (other.tag == "water")
         {
+            hitted = true;
             waterSound.pitch = 0.1f * 1.05946f * Random.Range(8, 15);
             waterSound.Play();
             GameObject newSplatters = Instantiate(waterSplatter, transform.position, new Quaternion()) as GameObject;
@@ -136,6 +142,7 @@ public class bulletMove : MonoBehaviour {
 
         else if (other.tag == "lava")
         {
+            hitted = true;
             waterSound.pitch = 0.1f * 1.05946f * Random.Range(8, 15);
             waterSound.Play();
 
@@ -180,5 +187,6 @@ public class bulletMove : MonoBehaviour {
             Destroy(newSplatters, 1.5f);
 
         }
+
     }
 }
