@@ -465,7 +465,8 @@ public class ControllerP1volcano_joystick : MonoBehaviour {
             GameObject newExplosion = Instantiate(explosion, transform.position, transform.rotation) as GameObject;
             Destroy(newExplosion, 2.0f);
             remainLife = 0;
-
+            AudioSource expSound = GameObject.Find("Blastwave_FX_CarExplosionDebris_HV.132 (1)").GetComponent<AudioSource>();
+            expSound.Play();
         }
     }
 }
