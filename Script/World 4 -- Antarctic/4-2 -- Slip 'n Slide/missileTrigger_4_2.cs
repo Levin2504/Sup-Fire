@@ -13,9 +13,10 @@ public class missileTrigger_4_2 : MonoBehaviour {
 
     void got(GameObject target)
     {
+        gameObject.GetComponent<FishMover>().enabled = false;
         Collider capCo = GetComponent<Collider>();
         capCo.enabled = false;
-        Destroy(gameObject, 1.5f);
+        Destroy(gameObject, 0.3f);
         Rigidbody rigid = GetComponent<Rigidbody>();
         rigid.AddForce((- transform.position + target.transform.position)*50f);
     }

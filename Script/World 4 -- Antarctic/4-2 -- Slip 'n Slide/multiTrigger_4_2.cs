@@ -12,9 +12,10 @@ public class multiTrigger_4_2 : MonoBehaviour {
     }
     void got(GameObject target)
     {
+        gameObject.GetComponent<FishMover>().enabled = false;
         Collider capCo = GetComponent<Collider>();
         capCo.enabled = false;
-        Destroy(gameObject, 1.5f);
+        Destroy(gameObject, 0.3f);
         Rigidbody rigid = GetComponent<Rigidbody>();
         rigid.AddForce((-transform.position + target.transform.position) * 50f);
     }
@@ -30,7 +31,6 @@ public class multiTrigger_4_2 : MonoBehaviour {
             target = bullet.comeFrom;
             target.SendMessage("SetMulti");
             got(target);
-
         }
         else if (other.tag == "Missile")
         {
@@ -38,7 +38,6 @@ public class multiTrigger_4_2 : MonoBehaviour {
             target = missile.comeFrom;
             target.SendMessage("SetMulti");
             got(target);
-
         }
     }
 }

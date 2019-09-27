@@ -87,7 +87,7 @@ public class controllerP1_4_2 : MonoBehaviour
         special = 5;
         isSpecial = true;
         UseTurret1();
-        gameObject.transform.GetChild(1).transform.localScale = new Vector3(0.5f, 0.5f, 0.3f);
+        gameObject.transform.GetChild(1).transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         this.transform.GetChild(1).GetChild(1).GetChild(1).gameObject.SetActive(false);
     }
 
@@ -244,14 +244,7 @@ public class controllerP1_4_2 : MonoBehaviour
     {
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        /*
-        rigid.position = new Vector3
-        (
-            Mathf.Clamp(rigid.position.x, boundary1mouse.xMin, boundary1mouse.xMax),
-            Mathf.Clamp(rigid.position.y, boundary1mouse.yMin, boundary1mouse.yMax),
-            Mathf.Clamp(rigid.position.z, boundary1mouse.zMin, boundary1mouse.zMax)
-        );
-        */
+  
         Vector3 pos = rigid.position;
         Vector3 direction = mousePos - pos;
         angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
@@ -261,7 +254,7 @@ public class controllerP1_4_2 : MonoBehaviour
         float h_axis = Input.GetAxis("Horizontal");
         float v_axis = Input.GetAxis("Vertical");
 
-        recoilVector =  recoilIntensity * -direction.normalized;
+        recoilVector =  -recoilIntensity * new Vector3 (direction.x, direction.y, 0).normalized;
         //recoiltest(firepoint.transform.position - gameObject.transform.position);
 
         testbuff();
@@ -464,23 +457,19 @@ public class controllerP1_4_2 : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void OnTriggerExit(Collider other)
+    private void Falling()
     {
-        if(other.tag == "IcePlatform")
+        if (!hasFall)
         {
-            remainLife = 0;
-            if (!hasFall)
-            {
-                waterSound.Play();
-                waterSplatter = GameObject.Find("FX_WaterSplatter");
-                GameObject newSplatters = Instantiate(waterSplatter, transform.position, new Quaternion()) as GameObject;
-                ParticleSystem SplattersParticle = newSplatters.GetComponent<ParticleSystem>();
-                var main = SplattersParticle.main;
-                main.startSize = 0.5f;
-                main.startSpeed = 5f;
-                Destroy(newSplatters, 1.5f);
-                hasFall = !hasFall;
-            }
+            waterSound.Play();
+            waterSplatter = GameObject.Find("FX_WaterSplatter");
+            GameObject newSplatters = Instantiate(waterSplatter, transform.position, new Quaternion()) as GameObject;
+            ParticleSystem SplattersParticle = newSplatters.GetComponent<ParticleSystem>();
+            var main = SplattersParticle.main;
+            main.startSize = 0.5f;
+            main.startSpeed = 5f;
+            Destroy(newSplatters, 1.5f);
+            hasFall = !hasFall;
         }
     }
 }
